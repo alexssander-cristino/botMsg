@@ -1,249 +1,187 @@
-# WhatsApp Prospect Bot
+# WhatsApp Prospect Dashboard
 
-**Automação de prospecção comercial com Python + WhatsApp Web**
+Painel web para organizar contatos, gerenciar campanhas de prospecção e preparar mensagens personalizadas para envio manual pelo WhatsApp Web.
 
-Uma ferramenta para organizar contatos comerciais, personalizar mensagens e facilitar o processo de prospecção pelo WhatsApp Web, utilizando Python e Playwright — sem necessidade de integrar a API oficial do WhatsApp.
+O projeto utiliza **Python, Flask, SQLite e Playwright**, com foco em organização, rastreabilidade e simplicidade de uso.
 
----
+> **Importante:** o sistema não utiliza a API oficial do WhatsApp. A automação abre o WhatsApp Web e prepara a mensagem para revisão e envio manual. Não há garantia de compatibilidade permanente com o WhatsApp Web.
 
-## Sobre o projeto
+## Funcionalidades
 
-O WhatsApp Prospect Bot automatiza etapas repetitivas da prospecção comercial, permitindo trabalhar com uma lista de empresas e contatos através de um arquivo CSV.
+- **Dashboard:** visão geral dos contatos, campanhas e atividades.
+- **Gestão de contatos:** cadastro, edição e organização de potenciais clientes.
+- **Importação de planilhas:** importação de contatos por arquivos CSV e Excel, conforme os formatos suportados pelo projeto.
+- **Campanhas:** organização dos contatos e mensagens por campanha.
+- **Mensagens personalizadas:** utilização de modelos com variáveis, como nome do contato e empresa.
+- **Envio manual:** preparação da conversa e da mensagem no WhatsApp Web, com revisão antes do envio.
+- **Histórico:** registro das atividades realizadas pelo sistema.
+- **Relatórios:** acompanhamento dos contatos e resultados registrados.
+- **Banco de dados local:** armazenamento persistente em SQLite.
+- **Controle de opt-out:** possibilidade de marcar contatos que não desejam receber novas mensagens.
 
-O sistema abre as conversas pelo número de telefone, prepara mensagens personalizadas e mantém um histórico por campanha para ajudar a evitar o reprocessamento de contatos.
-
-### Principais recursos
-
-- **Importação de contatos:** carregamento de empresas e telefones através de CSV.
-- **Mensagens personalizadas:** utiliza o nome do contato e da empresa no texto.
-- **WhatsApp Web:** acessa conversas pela interface web, sem exigir que o contato esteja salvo na agenda.
-- **Modo de simulação:** permite conferir a lista antes de iniciar a automação.
-- **Controle de campanhas:** identifica a campanha executada pelo usuário.
-- **Histórico local:** registra contatos processados para ajudar a evitar duplicidades dentro da mesma campanha.
-- **Filtro de autorização:** processa somente contatos marcados como autorizados.
-- **Limite de execução:** permite restringir a quantidade de contatos processados em uma execução.
-- **Perfil persistente do navegador:** facilita manter a sessão do WhatsApp Web entre execuções.
-
----
-
-## Tecnologias utilizadas
+## Tecnologias
 
 | Tecnologia | Finalidade |
 |---|---|
-| Python | Lógica principal da aplicação |
+| Python | Lógica e processamento |
+| Flask | Aplicação web e rotas |
+| SQLite | Armazenamento de dados |
 | Playwright | Automação do navegador |
-| Chromium | Navegador utilizado na automação |
-| CSV | Armazenamento da lista de contatos |
-| JSON | Registro local do histórico |
-
----
-
-## Estrutura do projeto
-
-```text
-bot-whatsapp/
-├── bot.py
-├── clientes.csv
-├── requirements.txt
-├── .gitignore
-├── README.md
-├── historico.json
-└── perfil_whatsapp/
-```
-
-Os nomes dos arquivos de histórico e da pasta de perfil podem variar conforme a implementação atual do código.
-
----
+| HTML, CSS e JavaScript | Interface do painel |
+| CSV e Excel | Importação de contatos |
 
 ## Requisitos
 
-Antes de começar, você precisa ter:
+Antes de começar, instale:
 
-- Python instalado no Windows.
-- pip disponível no terminal.
-- Conexão com a internet.
-- Uma conta do WhatsApp com acesso ao WhatsApp Web.
-- Os arquivos do projeto extraídos em uma pasta local.
-
----
+- Python 3.10 ou superior, conforme a compatibilidade das dependências.
+- Google Chrome ou Chromium, quando necessário para o navegador automatizado.
+- WhatsApp com uma conta ativa.
+- Acesso à internet para utilizar o WhatsApp Web.
 
 ## Instalação
 
-### 1. Abra o terminal na pasta do projeto
+### 1. Baixe e extraia o projeto
 
-No PowerShell, navegue até a pasta em que está o arquivo `bot.py`.
+Extraia os arquivos para uma pasta local. Abra o terminal nessa pasta.
 
-### 2. Crie o ambiente virtual
+### 2. Crie um ambiente virtual
+
+No Windows, usando PowerShell:
 
 ```powershell
 py -m venv .venv
 ```
 
-### 3. Ative o ambiente virtual
+Ative o ambiente:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 4. Instale as dependências
+Se o PowerShell bloquear a ativação, você pode executar os comandos usando o Python do ambiente virtual diretamente.
+
+### 3. Instale as dependências
 
 ```powershell
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 5. Instale o Chromium para o Playwright
+### 4. Instale o navegador do Playwright
 
 ```powershell
 python -m playwright install chromium
 ```
 
-Pronto! O ambiente está preparado para executar o projeto.
+### 5. Inicie o sistema
 
----
+```powershell
+python app.py
+```
 
-## Configuração dos contatos
+Abra o endereço local indicado no terminal. Se a aplicação utilizar a porta padrão configurada, acesse:
 
-Os contatos são cadastrados no arquivo `clientes.csv`.
+http://127.0.0.1:5000
 
-### Exemplo
+> Execute os comandos a partir da pasta do projeto e mantenha o terminal aberto enquanto estiver utilizando o painel.
+
+## Banco de dados SQLite
+
+O projeto utiliza SQLite, um banco de dados que funciona localmente, sem precisar instalar ou administrar um servidor separado.
+
+O arquivo `.db` armazena os dados persistentes da aplicação, como contatos, campanhas, modelos de mensagens e registros de atividades, de acordo com as tabelas implementadas.
+
+### Cuidados importantes
+
+- Não exclua o arquivo do banco enquanto estiver utilizando o sistema.
+- Faça cópias de segurança antes de atualizar o projeto.
+- Evite abrir o mesmo banco simultaneamente por processos que possam causar conflitos.
+- Se o banco for criado automaticamente pela aplicação, ele normalmente aparecerá no caminho configurado no código.
+- O histórico anterior em JSON só será migrado se essa funcionalidade estiver implementada e o arquivo antigo estiver disponível no local esperado.
+
+**Atenção:** o nome e o caminho exatos do arquivo do banco dependem da configuração da aplicação. Confira o código de inicialização antes de mover ou excluir arquivos.
+
+## Importação de contatos
+
+Prepare uma planilha com os campos aceitos pelo sistema. Um exemplo de CSV:
 
 ```csv
 empresa,contato,telefone,autorizou
-Empresa Exemplo,João,5547999990001,sim
-Comércio Modelo,Maria,5547999990002,sim
-Negócio Demonstrativo,Pedro,5547999990003,nao
+Empresa Exemplo,João,5547999999999,sim
+Loja Modelo,Maria,5547988888888,sim
 ```
 
-### Campos disponíveis
+Recomendações:
 
-| Campo | Descrição |
-|---|---|
-| `empresa` | Nome da empresa |
-| `contato` | Nome da pessoa que receberá a mensagem |
-| `telefone` | Número com código do país, DDD e telefone |
-| `autorizou` | Define se o contato pode ser processado |
+- Utilize o código do país e o DDD no telefone.
+- Verifique se os números estão corretos.
+- Remova contatos duplicados antes de importar.
+- Utilize o campo de autorização de acordo com as regras de consentimento implementadas no sistema.
+- Não importe listas compradas ou contatos que não esperam receber suas mensagens.
 
-**Formato recomendado para telefones:** `55 + DDD + número`, utilizando somente dígitos.
+O formato acima é um exemplo. Os nomes das colunas devem corresponder aos campos aceitos pela versão instalada.
 
-O campo `autorizou` deve conter `sim` para que o contato seja elegível. Contatos sem autorização devem permanecer fora da prospecção.
+## Modelos de mensagens
 
-Os números do exemplo são fictícios e devem ser substituídos por contatos reais que tenham autorizado o recebimento.
-
----
-
-## Como executar
-
-### Modo de simulação
-
-Antes de abrir o WhatsApp, confira os contatos elegíveis:
-
-```powershell
-python bot.py --campanha prospeccao-01
-```
-
-Esse comando executa o modo de simulação, sem iniciar o envio de mensagens.
-
-### Iniciar a automação
-
-Para começar a processar os contatos pelo WhatsApp Web:
-
-```powershell
-python bot.py --enviar --campanha prospeccao-01
-```
-
-Para testar com apenas um contato:
-
-```powershell
-python bot.py --enviar --campanha prospeccao-01 --limite 1
-```
-
-### Primeiro acesso ao WhatsApp Web
-
-1. Execute o comando de automação.
-2. Aguarde o Chromium abrir.
-3. Se necessário, escaneie o QR Code com o WhatsApp do celular.
-4. Aguarde a conversa do contato ser aberta.
-5. Confira o destinatário e o conteúdo da mensagem.
-6. Envie a mensagem manualmente pelo WhatsApp Web.
-7. Confirme no terminal para continuar o processamento.
-
-**Importante:** a versão atual prepara as mensagens, mas não clica automaticamente no botão de envio. A confirmação no terminal permite avançar para o próximo contato.
-
----
-
-## Personalização das mensagens
-
-O bot monta a mensagem utilizando os dados de cada contato.
+Utilize modelos para padronizar as abordagens e personalizar as mensagens de acordo com os dados disponíveis.
 
 Exemplo ilustrativo:
 
 ```text
-Olá, João, tudo bem?
+Olá, {contato}! Tudo bem?
 
-Meu nome é Alex e trabalho com desenvolvimento de sites e
-sistemas personalizados para empresas, criando soluções
-digitais de acordo com as necessidades de cada negócio,
-com foco em organização, eficiência e otimização de processos.
+Sou responsável pela {empresa}. Gostaria de apresentar
+uma solução que pode ser interessante para o seu negócio.
 
-Gostaria de me colocar à disposição para conversar e entender
-se alguma solução digital pode agregar valor à Empresa Exemplo.
-
-Fico à disposição!
-
-Atenciosamente,
-Alex
-
-Se não quiser receber novas mensagens, é só me avisar.
+Se tiver interesse, posso enviar mais informações.
+Caso não queira receber novas mensagens, é só me avisar.
 ```
 
-A mensagem pode ser adaptada para diferentes segmentos, mantendo uma abordagem profissional, transparente e respeitosa.
+Os nomes das variáveis precisam corresponder aos identificadores suportados pela aplicação.
 
----
+## Fluxo de uma campanha
 
-## Como funcionam as campanhas
+1. Cadastre ou importe os contatos.
+2. Revise os telefones e as autorizações.
+3. Crie uma campanha.
+4. Selecione ou prepare um modelo de mensagem.
+5. Revise a mensagem personalizada antes de cada envio.
+6. Abra a conversa no WhatsApp Web.
+7. Confira o destinatário e envie manualmente.
+8. Registre o resultado no painel, quando disponível.
+9. Consulte o histórico e os relatórios para acompanhar a campanha.
 
-Cada execução pode receber um identificador de campanha.
-
-Exemplo:
-
-```powershell
-python bot.py --enviar --campanha prospeccao-01
-```
-
-Outra campanha:
-
-```powershell
-python bot.py --enviar --campanha prospeccao-02
-```
-
-O histórico é utilizado para ajudar a impedir que os mesmos contatos sejam processados novamente na mesma campanha.
-
-**Atenção:** o histórico registra o processamento realizado pelo bot, não necessariamente a confirmação de que a mensagem foi entregue. Como o envio é manual, confirme que a mensagem foi realmente enviada antes de considerar o contato concluído.
-
-Criar uma campanha com outro nome pode fazer com que contatos antigos sejam processados novamente. Confira a lista antes de iniciar uma nova campanha.
-
----
+O sistema deve distinguir entre uma mensagem apenas preparada, uma mensagem efetivamente enviada e uma resposta recebida. Abrir uma conversa não comprova que a mensagem foi enviada.
 
 ## Boas práticas
 
-- Revise os números e os nomes antes de iniciar.
-- Utilize mensagens relevantes para cada empresa.
-- Faça uma simulação antes da execução real.
-- Comece com poucos contatos para validar o funcionamento.
-- Não reutilize campanhas sem conferir o histórico.
-- Respeite pedidos para não receber novas mensagens.
-- Entre em contato somente com pessoas que autorizaram a prospecção.
-- Não utilize listas compradas, spam ou práticas que violem as regras do WhatsApp.
+- Envie mensagens relevantes e personalizadas.
+- Contate apenas pessoas que tenham autorizado ou que legitimamente esperem esse contato, respeitando a legislação aplicável.
+- Identifique claramente quem está entrando em contato.
+- Respeite imediatamente os pedidos para não receber novas mensagens.
+- Evite abordagens repetitivas, listas indiscriminadas e práticas que possam ser consideradas spam.
+- Faça testes com poucos contatos antes de executar uma campanha maior.
+- Não compartilhe o perfil do navegador, cookies ou sessões autenticadas.
 
-A automação via navegador não é uma integração oficial com o WhatsApp e pode parar de funcionar caso a interface seja alterada. O uso também pode estar sujeito a restrições da plataforma.
-
----
+A automação não oficial pode parar de funcionar após mudanças no WhatsApp Web e pode resultar em restrições da conta. O uso do projeto é de responsabilidade do operador.
 
 ## Solução de problemas
 
-### O Chromium não abre
+### O painel não inicia
 
-Execute novamente a instalação do navegador:
+Confira se o ambiente virtual está ativo e se as dependências foram instaladas:
+
+```powershell
+pip install -r requirements.txt
+python app.py
+```
+
+Verifique também se a porta configurada já está sendo utilizada.
+
+### O navegador não abre
+
+Instale novamente o navegador do Playwright:
 
 ```powershell
 python -m playwright install chromium
@@ -251,54 +189,46 @@ python -m playwright install chromium
 
 ### O WhatsApp solicita autenticação
 
-Escaneie o QR Code com o celular e aguarde o carregamento completo das conversas.
+Abra o WhatsApp Web e faça a leitura do QR Code com o celular. Se o projeto utilizar um perfil persistente, a sessão poderá ser reutilizada enquanto permanecer válida.
 
-### O contato não é encontrado
+### Os contatos não são importados
 
-Verifique se o número está correto, possui código do país e DDD e está registrado no WhatsApp.
+Confira os cabeçalhos da planilha, o formato do arquivo e a presença dos campos obrigatórios. Verifique também as mensagens de erro exibidas pelo painel ou terminal.
 
-### O contato é ignorado
+### Os dados parecem ter desaparecido
 
-Confira o valor de `autorizou` no CSV e verifique o histórico da campanha.
-
-### O bot não inicia
-
-Certifique-se de estar na pasta correta, com o ambiente virtual ativado e as dependências instaladas.
-
----
+Confira o caminho do banco SQLite configurado na aplicação. Executar o projeto a partir de outra pasta ou alterar a configuração do banco pode fazer com que outro arquivo seja utilizado.
 
 ## Segurança e privacidade
 
-- Mantenha a sessão do navegador protegida.
-- Não compartilhe a pasta de perfil do WhatsApp.
-- Não publique arquivos com dados pessoais de clientes.
-- Não envie credenciais, tokens ou informações privadas para repositórios públicos.
-- Utilize os dados dos contatos somente para a finalidade autorizada.
+- Mantenha o banco de dados e os arquivos de sessão protegidos.
+- Não publique arquivos `.db`, cookies ou dados pessoais em repositórios públicos.
+- Não compartilhe credenciais nem sessões autenticadas.
+- Realize backups periódicos.
+- Utilize os dados dos contatos somente para finalidades legítimas e compatíveis com a autorização recebida.
 
----
+## Estrutura do projeto
 
-## Roadmap
+A estrutura exata depende dos arquivos incluídos na versão instalada. Uma organização típica pode conter:
 
-Possíveis melhorias para versões futuras:
+```text
+whatsapp-prospect-dashboard/
+├── app.py
+├── bot.py
+├── requirements.txt
+├── templates/
+├── static/
+├── prospect.db
+└── README.md
+```
 
-- [ ] Interface gráfica para gerenciar campanhas.
-- [ ] Editor de mensagens com variáveis personalizadas.
-- [ ] Relatórios de contatos processados.
-- [ ] Histórico com status de envio confirmado.
-- [ ] Importação de planilhas Excel.
-- [ ] Validação de números antes da execução.
-- [ ] Agendamento de campanhas com limites configuráveis.
-- [ ] Painel de acompanhamento de resultados.
-
-*Os itens acima são ideias para futuras versões, não funcionalidades garantidas na versão atual.*
-
----
+O arquivo do banco pode não existir antes da primeira inicialização caso seja criado automaticamente pela aplicação. A presença de cada pasta ou arquivo depende da implementação real do projeto.
 
 ## Licença
 
-Projeto de automação local para uso comercial responsável. Defina uma licença específica antes de redistribuir ou publicar o código como software de código aberto.
+Defina uma licença antes de distribuir publicamente o projeto. Na ausência de uma licença explícita, não presuma que terceiros têm permissão para redistribuir ou modificar o código.
 
 ---
 
-**Desenvolvido por Alex**  
-*Python · Playwright · WhatsApp Web*
+**WhatsApp Prospect Dashboard**  
+Organização de contatos e campanhas com revisão humana antes do envio.

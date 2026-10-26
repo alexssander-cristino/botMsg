@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}WhatsApp Prospect{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">W</span><span>Prospect<span class="brand-sub">WHATSAPP DESK</span></span></a>
+    <nav>
+      <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span>▦</span> Visão geral</a>
+      <a class="nav-link {% if request.endpoint in ['contacts','import_contacts'] %}active{% endif %}" href="{{ url_for('contacts') }}"><span>♙</span> Contatos</a>
+      <a class="nav-link {% if request.endpoint in ['campaigns','campaign_detail'] %}active{% endif %}" href="{{ url_for('campaigns') }}"><span>↗</span> Campanhas</a>
+      <a class="nav-link {% if request.endpoint == 'templates_page' %}active{% endif %}" href="{{ url_for('templates_page') }}"><span>▤</span> Modelos de mensagem</a>
+      <a class="nav-link {% if request.endpoint == 'reports' %}active{% endif %}" href="{{ url_for('reports') }}"><span>◷</span> Relatórios</a>
+    </nav>
+    <div class="sidebar-bottom"><div class="local-chip"><span class="dot"></span> Dados armazenados localmente</div><small>WhatsApp Web · Envio manual</small></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">PROSPECÇÃO COMERCIAL</span><h1>{% block page_title %}Visão geral{% endblock %}</h1></div>
+      <div class="wa-control"><span class="status-dot {% if wa_state.connected %}online{% elif wa_state.busy %}busy{% endif %}"></span><div><b id="wa-title">{% if wa_state.connected %}WhatsApp conectado{% elif wa_state.busy %}Conectando WhatsApp{% else %}WhatsApp desconectado{% endif %}</b><small id="wa-message">{{ wa_state.message }}</small></div><button class="btn btn-outline btn-small" id="connect-wa" type="button">Conectar</button></div>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-list">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    {% block content %}{% endblock %}
+    <footer>WhatsApp Prospect <span>·</span> Painel local <span>·</span> Revise cada mensagem antes de enviar.</footer>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
