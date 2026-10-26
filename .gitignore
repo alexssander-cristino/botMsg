@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+perfil_whatsapp/
+historico.json
+
+clientes.csv
